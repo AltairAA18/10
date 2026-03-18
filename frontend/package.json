@@ -1,0 +1,17 @@
+{
+    "name": "blog-frontend",
+    "version": "1.0.0",
+    "description": "Frontend для Blog API на JavaScript",
+    "main": "index.html",
+    "scripts": {
+        "dev": "http-server -p 8000",
+        "start": "http-server -p 8000 -o"
+    },
+    "keywords": ["blog", "javascript", "frontend"],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {},
+    "devDependencies": {
+        "http-server": "^14.1.1"
+    }
+}

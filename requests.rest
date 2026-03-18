@@ -1,0 +1,61 @@
+@baseUrl = http://localhost:5000
+@token = 
+
+### Регистрация пользователя
+POST {{baseUrl}}/api/users/register
+Content-Type: application/json
+
+{
+  "name": "Иван Петров",
+  "email": "ivan@example.com",
+  "password": "password123"
+}
+
+### Вход пользователя
+POST {{baseUrl}}/api/users/login
+Content-Type: application/json
+
+{
+  "email": "ivan@example.com",
+  "password": "password123"
+}
+
+### Получить все опубликованные статьи
+GET {{baseUrl}}/api/articles
+
+### Получить статьи определенной категории
+GET {{baseUrl}}/api/articles/category/Технология
+
+### Получить статью по ID
+GET {{baseUrl}}/api/articles/64a7b2c...
+
+### Создать новую статью
+POST {{baseUrl}}/api/articles
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "title": "Введение в Node.js",
+  "content": "Node.js - это среда выполнения JavaScript на стороне сервера. Она позволяет разработчикам использовать JavaScript для написания серверного кода.",
+  "excerpt": "Краткое введение в Node.js",
+  "category": "Технология",
+  "tags": ["javascript", "nodejs", "backend"],
+  "published": true
+}
+
+### Обновить статью
+PUT {{baseUrl}}/api/articles/64a7b2c...
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "title": "Обновленное название статьи",
+  "content": "Обновленное содержание статьи..."
+}
+
+### Добавить лайк статье
+POST {{baseUrl}}/api/articles/64a7b2c.../like
+
+### Удалить статью
+DELETE {{baseUrl}}/api/articles/64a7b2c...
+Authorization: Bearer {{token}}

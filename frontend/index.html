@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog - Мой Блог</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <!-- Навигация -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-brand">
+                <a href="#" class="logo" onclick="event.preventDefault(); app.showPage('articles')">My Blog</a>
+            </div>
+            <div class="navbar-menu" id="navbarMenu">
+                <a href="#" onclick="event.preventDefault(); app.showPage('articles')" class="nav-link">Все статьи</a>
+                <span id="userNav" style="display: none;" class="nav-group">
+                    <a href="#" onclick="event.preventDefault(); app.showPage('create')" class="nav-link">Написать</a>
+                    <a href="#" onclick="event.preventDefault(); app.showPage('profile')" class="nav-link" id="profileLink">Профиль</a>
+                    <a href="#" onclick="event.preventDefault(); auth.logout()" class="nav-link">Выход</a>
+                </span>
+                <span id="guestNav" class="nav-group">
+                    <a href="#" onclick="event.preventDefault(); app.showPage('login')" class="nav-link">Вход</a>
+                    <a href="#" onclick="event.preventDefault(); app.showPage('register')" class="nav-link btn btn-primary">Регистрация</a>
+                </span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Главный контент -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Страница: Список статей -->
+            <div id="articlesPage" class="page active">
+                <!-- Героэкран -->
+                <div class="hero-section">
+                    <div class="hero-content">
+                        <h1>Мир интересных идей</h1>
+                        <p class="subtitle">Читайте и делитесь самыми интересными статьями. Вдохновляйтесь, учитесь и растите вместе с нами</p>
+                    </div>
+                </div>
+
+                <div class="container">
+                    <div class="page-header">
+                        <h1>Свежие статьи</h1>
+                        <p>Откройте для себя новые идеи и истории</p>
+                    </div>
+
+                    <!-- Фильтр по категориям -->
+                    <div class="categories-filter">
+                        <button class="category-btn active" onclick="app.filterByCategory('')">Все</button>
+                        <button class="category-btn" onclick="app.filterByCategory('Технология')">Технология</button>
+                        <button class="category-btn" onclick="app.filterByCategory('Жизнь')">Жизнь</button>
+                        <button class="category-btn" onclick="app.filterByCategory('Путешествия')">Путешествия</button>
+                        <button class="category-btn" onclick="app.filterByCategory('Бизнес')">Бизнес</button>
+                    </div>
+
+                    <!-- Список статей -->
+                    <div id="articlesList" class="articles-grid">
+                        <div class="loading">Загрузка статей...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Страница: Одна статья -->
+            <div id="articlePage" class="page">
+                <div id="articleContent" class="article-full">
+                    <!-- Содержание статьи загружается сюда -->
+                </div>
+            </div>
+
+            <!-- Страница: Вход -->
+            <div id="loginPage" class="page">
+                <div class="auth-form-container">
+                    <div class="auth-form">
+                        <h2>Вход в блог</h2>
+                        <form id="loginForm" onsubmit="auth.login(event)">
+                            <div class="form-group">
+                                <label for="loginEmail">Email:</label>
+                                <input type="email" id="loginEmail" required placeholder="your@email.com">
+                            </div>
+                            <div class="form-group">
+                                <label for="loginPassword">Пароль:</label>
+                                <input type="password" id="loginPassword" required placeholder="Пароль">
+                            </div>
+                            <button type="submit" class="btn btn-primary" style="width: 100%;">Войти</button>
+                        </form>
+                        <p class="form-footer">
+                            Нет аккаунта? <a href="#" onclick="app.showPage('register')">Зарегистрируйтесь</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Страница: Регистрация -->
+            <div id="registerPage" class="page">
+                <div class="auth-form-container">
+                    <div class="auth-form">
+                        <h2>Регистрация</h2>
+                        <form id="registerForm" onsubmit="auth.register(event)">
+                            <div class="form-group">
+                                <label for="registerName">Имя:</label>
+                                <input type="text" id="registerName" required placeholder="Ваше имя">
+                            </div>
+                            <div class="form-group">
+                                <label for="registerEmail">Email:</label>
+                                <input type="email" id="registerEmail" required placeholder="your@email.com">
+                            </div>
+                            <div class="form-group">
+                                <label for="registerPassword">Пароль:</label>
+                                <input type="password" id="registerPassword" required placeholder="Минимум 6 символов">
+                            </div>
+                            <button type="submit" class="btn btn-primary" style="width: 100%;">Зарегистрироваться</button>
+                        </form>
+                        <p class="form-footer">
+                            Уже есть аккаунт? <a href="#" onclick="app.showPage('login')">Войдите</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Страница: Создание статьи -->
+            <div id="createPage" class="page">
+                <div class="create-form-container">
+                    <div class="create-form">
+                        <h2>Написать новую статью</h2>
+                        <form id="createForm" onsubmit="articles.createArticle(event)">
+                            <div class="form-group">
+                                <label for="articleTitle">Название:</label>
+                                <input type="text" id="articleTitle" required placeholder="Название статьи" maxlength="200">
+                            </div>
+                            <div class="form-group">
+                                <label for="articleExcerpt">Выдержка (краткое описание):</label>
+                                <input type="text" id="articleExcerpt" placeholder="Краткое описание" maxlength="500">
+                            </div>
+                            <div class="form-group">
+                                <label for="articleContent">Содержание:</label>
+                                <textarea id="articleContent" required placeholder="Содержание статьи" rows="12"></textarea>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="articleCategory">Категория:</label>
+                                    <select id="articleCategory" required>
+                                        <option value="" disabled selected>Выберите категорию</option>
+                                        <option value="Технология">Технология</option>
+                                        <option value="Жизнь">Жизнь</option>
+                                        <option value="Путешествия">Путешествия</option>
+                                        <option value="Бизнес">Бизнес</option>
+                                        <option value="Здоровье">Здоровье</option>
+                                        <option value="Образование">Образование</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="articleTags">Теги (через запятую):</label>
+                                    <input type="text" id="articleTags" placeholder="tag1, tag2, tag3">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="articlePublished">
+                                    <span>Опубликовать сейчас</span>
+                                </label>
+                            </div>
+                            <div class="form-actions">
+                                <button type="submit" class="btn btn-primary">Опубликовать</button>
+                                <button type="button" class="btn btn-secondary" onclick="app.showPage('articles')">Отмена</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Страница: Редактирование статьи -->
+            <div id="editPage" class="page">
+                <div class="create-form-container">
+                    <div class="create-form">
+                        <h2>Редактировать статью</h2>
+                        <form id="editForm" onsubmit="articles.updateArticle(event)">
+                            <input type="hidden" id="editArticleId">
+                            <div class="form-group">
+                                <label for="editTitle">Название:</label>
+                                <input type="text" id="editTitle" required placeholder="Название статьи" maxlength="200">
+                            </div>
+                            <div class="form-group">
+                                <label for="editExcerpt">Выдержка:</label>
+                                <input type="text" id="editExcerpt" placeholder="Краткое описание" maxlength="500">
+                            </div>
+                            <div class="form-group">
+                                <label for="editContent">Содержание:</label>
+                                <textarea id="editContent" required placeholder="Содержание статьи" rows="12"></textarea>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="editCategory">Категория:</label>
+                                    <select id="editCategory" required>
+                                        <option value="" disabled>Выберите категорию</option>
+                                        <option value="Технология">Технология</option>
+                                        <option value="Жизнь">Жизнь</option>
+                                        <option value="Путешествия">Путешествия</option>
+                                        <option value="Бизнес">Бизнес</option>
+                                        <option value="Здоровье">Здоровье</option>
+                                        <option value="Образование">Образование</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="editTags">Теги:</label>
+                                    <input type="text" id="editTags" placeholder="tag1, tag2, tag3">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="editPublished">
+                                    <span>Опубликовано</span>
+                                </label>
+                            </div>
+                            <div class="form-actions">
+                                <button type="submit" class="btn btn-primary">Сохранить</button>
+                                <button type="button" class="btn btn-secondary" onclick="app.showPage('articles')">Отмена</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Страница: Профиль пользователя -->
+            <div id="profilePage" class="page">
+                <div class="profile-container">
+                    <div class="profile-header">
+                        <h2 id="profileName">Профиль</h2>
+                        <p id="profileEmail"></p>
+                    </div>
+                    <div class="profile-content">
+                        <h3>Ваши статьи</h3>
+                        <div id="userArticles" class="user-articles-list">
+                            <div class="loading">Загрузка...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Уведомления -->
+    <div id="notification" class="notification"></div>
+
+    <!-- Скрипты -->
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/articles.js"></script>
+    <script src="js/app.js"></script>
+</body>
+
+</html>
